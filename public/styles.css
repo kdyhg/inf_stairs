@@ -237,7 +237,7 @@ button:active {
   width: 68px;
   height: 126px;
   --flip: 1;
-  --hop-x: 0px;
+  --dash-flip: 1;
   --hop-half: 0px;
   --hop-rot: 0deg;
   transform: translateX(-50%);
@@ -256,57 +256,52 @@ button:active {
   filter: drop-shadow(3px 4px 0 rgba(37, 23, 31, 0.28));
   transform: scaleX(var(--flip));
   transform-origin: center bottom;
+  transition: opacity 60ms steps(1, end);
 }
 
-.player::before {
+.player::after {
   position: absolute;
-  left: -38px;
-  top: 38px;
-  z-index: 1;
-  width: 64px;
-  height: 88px;
-  background:
-    linear-gradient(135deg, transparent 0 20%, rgba(62, 224, 255, 0.8) 21% 30%, transparent 31% 38%, rgba(57, 133, 255, 0.76) 39% 48%, transparent 49%),
-    linear-gradient(135deg, transparent 0 42%, rgba(158, 255, 255, 0.8) 43% 59%, transparent 60%);
-  clip-path: polygon(84% 0, 100% 0, 44% 100%, 26% 100%);
+  left: -65px;
+  bottom: -34px;
+  z-index: 3;
+  width: 154px;
+  height: 190px;
+  background: url("assets/office-worker-dash.png") center / contain no-repeat;
   content: "";
   image-rendering: pixelated;
   opacity: 0;
-  transform: skewY(-12deg);
+  transform: scaleX(var(--dash-flip));
+  transform-origin: center bottom;
+  filter: drop-shadow(4px 5px 0 rgba(37, 23, 31, 0.26));
   pointer-events: none;
 }
 
 .player.face-left {
   --flip: 1;
+  --dash-flip: -1;
 }
 
 .player.face-right {
   --flip: -1;
+  --dash-flip: 1;
 }
 
 .player.hop-left {
-  animation: stair-hop 170ms steps(3, end);
+  animation: stair-hop 150ms steps(2, end);
 }
 
 .player.hop-right {
-  animation: stair-hop 170ms steps(3, end);
+  animation: stair-hop 150ms steps(2, end);
 }
 
-.player.face-left::before {
-  left: auto;
-  right: -38px;
-  transform: scaleX(-1) skewY(-12deg);
+.player.hop-left img,
+.player.hop-right img {
+  opacity: 0;
 }
 
-.player.face-right::before {
-  left: -38px;
-  right: auto;
-  transform: skewY(-12deg);
-}
-
-.player.hop-left::before,
-.player.hop-right::before {
-  animation: trail-flash 170ms steps(3, end);
+.player.hop-left::after,
+.player.hop-right::after {
+  animation: dash-sprite 150ms steps(2, end);
 }
 
 .player.fall {
@@ -318,12 +313,8 @@ button:active {
     transform: translateX(-50%) translateY(0) rotate(0);
   }
 
-  33% {
-    transform: translateX(calc(-50% + var(--hop-half))) translateY(-22px) rotate(var(--hop-rot));
-  }
-
-  66% {
-    transform: translateX(calc(-50% + var(--hop-x))) translateY(-36px) rotate(var(--hop-rot));
+  45% {
+    transform: translateX(calc(-50% + var(--hop-half))) translateY(-5px) rotate(var(--hop-rot));
   }
 
   100% {
@@ -331,15 +322,15 @@ button:active {
   }
 }
 
-@keyframes trail-flash {
+@keyframes dash-sprite {
   0%,
   100% {
     opacity: 0;
   }
 
-  33%,
-  66% {
-    opacity: 0.72;
+  20%,
+  80% {
+    opacity: 1;
   }
 }
 
@@ -428,11 +419,10 @@ input {
 
 .menu-actions {
   display: grid;
-  grid-template-columns: 1fr 1.25fr;
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
-.rank-menu-button,
 .play-button {
   min-height: 76px;
   border-color: #7e3328;
@@ -443,29 +433,6 @@ input {
     inset 0 -10px 0 #f08916,
     0 6px 0 #7e3328,
     0 9px 0 #2d1b1d;
-}
-
-.rank-menu-button {
-  color: #fff8c8;
-  font-size: 24px;
-  letter-spacing: 1px;
-  text-shadow:
-    2px 2px 0 #9a3218,
-    -1px -1px 0 #7e3328;
-}
-
-.rank-menu-button::before {
-  width: 28px;
-  height: 28px;
-  margin-bottom: 2px;
-  border: 4px solid #7e3328;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 38%, #fff4a3 0 25%, transparent 26%),
-    linear-gradient(135deg, transparent 0 26%, #de4a24 27% 38%, transparent 39% 100%),
-    linear-gradient(225deg, transparent 0 26%, #de4a24 27% 38%, transparent 39% 100%),
-    linear-gradient(180deg, #ffd83b, #f29a11);
-  content: "";
 }
 
 .play-button {
