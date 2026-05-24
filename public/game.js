@@ -198,10 +198,11 @@ async function submitScore() {
       })
     });
 
-    if (!response.ok) throw new Error("submit-failed");
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "점수 저장에 실패했습니다.");
     await loadRankings("점수가 등록되었습니다.");
-  } catch {
-    elements.rankingStatus.textContent = "점수 등록에 실패했습니다. 서버를 확인해 주세요.";
+  } catch (error) {
+    elements.rankingStatus.textContent = error.message || "점수 등록에 실패했습니다. 서버를 확인해 주세요.";
   }
 }
 
@@ -211,12 +212,12 @@ async function loadRankings(successMessage = "새로고침 완료") {
 
   try {
     const response = await fetch(`${RANKINGS_ENDPOINT}?t=${Date.now()}`, { cache: "no-store" });
-    if (!response.ok) throw new Error("rankings-failed");
     const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "랭킹을 불러올 수 없습니다.");
     renderRankings(data.rankings || []);
     elements.rankingStatus.textContent = data.rankings?.length ? successMessage : "아직 등록된 기록이 없습니다.";
-  } catch {
-    elements.rankingStatus.textContent = "랭킹 서버에 연결할 수 없습니다.";
+  } catch (error) {
+    elements.rankingStatus.textContent = error.message || "랭킹 서버에 연결할 수 없습니다.";
   } finally {
     elements.refreshRankings.disabled = false;
   }

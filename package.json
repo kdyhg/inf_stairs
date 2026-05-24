@@ -1,7 +1,7 @@
 {
   "name": "inf-stairs",
   "version": "1.0.0",
-  "description": "A retro stair-climbing keyboard game with server-backed rankings.",
+  "description": "A retro stair-climbing keyboard game with Google Sheets-backed rankings.",
   "type": "module",
   "scripts": {
     "start": "node server.js",
