@@ -83,11 +83,11 @@ button:active {
   border: 5px solid var(--ink);
   border-radius: 6px;
   overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 10px, transparent 10px 64px) 28px 140px / 92px 102px,
-    repeating-linear-gradient(0deg, transparent 0 27px, rgba(255, 255, 255, 0.42) 27px 31px),
-    repeating-linear-gradient(90deg, transparent 0 56px, rgba(255, 255, 255, 0.3) 56px 60px),
-    linear-gradient(180deg, #b98b76 0 50%, #795056 50% 100%);
+  background-color: #b5d5df;
+  background-image: url("assets/urban-background.png");
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
   box-shadow: 10px 10px 0 var(--shadow);
   image-rendering: pixelated;
   outline: none;
@@ -97,27 +97,13 @@ button:active {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background:
-    linear-gradient(180deg, rgba(156, 228, 255, 0.94) 0 18%, transparent 18%),
-    radial-gradient(circle at 18% 11%, #fff 0 18px, transparent 19px),
-    radial-gradient(circle at 28% 10%, #fff 0 24px, transparent 25px),
-    radial-gradient(circle at 74% 12%, #fff 0 23px, transparent 24px),
-    radial-gradient(circle at 84% 12%, #fff 0 17px, transparent 18px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 42%);
   content: "";
   pointer-events: none;
 }
 
 .stage::after {
-  position: absolute;
-  inset: auto 0 0;
-  z-index: 2;
-  height: 96px;
-  border-top: 5px solid var(--outline);
-  background:
-    repeating-linear-gradient(90deg, rgba(37, 23, 31, 0.26) 0 4px, transparent 4px 24px),
-    linear-gradient(180deg, #c8d7e5 0 16px, #5b6f93 16px 58px, #f2db8c 58px 64px, #d2c1a0 64px 100%);
-  content: "";
-  pointer-events: none;
+  content: none;
 }
 
 .hud {
@@ -203,8 +189,8 @@ button:active {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 72px;
-  height: 49px;
+  width: 76px;
+  height: 40px;
   background: url("assets/stair.png") center / contain no-repeat;
   filter: drop-shadow(5px 7px 0 rgba(37, 23, 31, 0.22));
   image-rendering: pixelated;
@@ -254,7 +240,7 @@ button:active {
   --hop-x: 0px;
   --hop-half: 0px;
   --hop-rot: 0deg;
-  transform: translateX(-50%) scaleX(var(--flip));
+  transform: translateX(-50%);
   transform-origin: center bottom;
   transition: opacity 160ms ease;
 }
@@ -268,6 +254,8 @@ button:active {
   object-fit: contain;
   image-rendering: pixelated;
   filter: drop-shadow(3px 4px 0 rgba(37, 23, 31, 0.28));
+  transform: scaleX(var(--flip));
+  transform-origin: center bottom;
 }
 
 .player::before {
@@ -289,6 +277,10 @@ button:active {
 }
 
 .player.face-left {
+  --flip: 1;
+}
+
+.player.face-right {
   --flip: -1;
 }
 
@@ -300,30 +292,42 @@ button:active {
   animation: stair-hop 170ms steps(3, end);
 }
 
+.player.face-left::before {
+  left: auto;
+  right: -38px;
+  transform: scaleX(-1) skewY(-12deg);
+}
+
+.player.face-right::before {
+  left: -38px;
+  right: auto;
+  transform: skewY(-12deg);
+}
+
 .player.hop-left::before,
 .player.hop-right::before {
   animation: trail-flash 170ms steps(3, end);
 }
 
 .player.fall {
-  transform: translate(-50%, 130px) scaleX(var(--flip)) rotate(38deg);
+  transform: translate(-50%, 130px) rotate(38deg);
 }
 
 @keyframes stair-hop {
   0% {
-    transform: translateX(-50%) translateY(0) scaleX(var(--flip)) rotate(0);
+    transform: translateX(-50%) translateY(0) rotate(0);
   }
 
   33% {
-    transform: translateX(calc(-50% + var(--hop-half))) translateY(-22px) scaleX(var(--flip)) rotate(var(--hop-rot));
+    transform: translateX(calc(-50% + var(--hop-half))) translateY(-22px) rotate(var(--hop-rot));
   }
 
   66% {
-    transform: translateX(calc(-50% + var(--hop-x))) translateY(-36px) scaleX(var(--flip)) rotate(var(--hop-rot));
+    transform: translateX(calc(-50% + var(--hop-x))) translateY(-36px) rotate(var(--hop-rot));
   }
 
   100% {
-    transform: translateX(-50%) translateY(0) scaleX(var(--flip)) rotate(0);
+    transform: translateX(-50%) translateY(0) rotate(0);
   }
 }
 
@@ -346,12 +350,13 @@ button:active {
   display: grid;
   place-items: center;
   padding: 26px;
-  background:
-    linear-gradient(180deg, rgba(156, 228, 255, 0.96) 0 24%, transparent 24%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 10px, transparent 10px 58px) 24px 160px / 92px 96px,
-    repeating-linear-gradient(0deg, transparent 0 27px, rgba(255, 255, 255, 0.42) 27px 31px),
-    repeating-linear-gradient(90deg, transparent 0 56px, rgba(255, 255, 255, 0.3) 56px 60px),
-    linear-gradient(180deg, #b98b76 0 50%, #795056 50% 100%);
+  background-color: #b5d5df;
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(181, 213, 223, 0.12)),
+    url("assets/urban-background.png");
+  background-position: center top, center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% auto;
 }
 
 .start-screen.hidden {

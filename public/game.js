@@ -1,8 +1,8 @@
 const TOTAL_TIME_MS = 20_000;
 const LOOKAHEAD = 36;
 const STEP_X = 56;
-const STEP_Y = 35;
-const STAGE_BASE_OFFSET = 145;
+const STEP_Y = 34;
+const STAGE_BASE_OFFSET = 136;
 const RANKINGS_ENDPOINT = "/api/rankings";
 
 const elements = {
