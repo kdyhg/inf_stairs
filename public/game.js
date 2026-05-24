@@ -19,6 +19,9 @@ const elements = {
   timerText: document.querySelector("#timerText"),
   stairLayer: document.querySelector("#stairLayer"),
   player: document.querySelector("#player"),
+  mobileLeft: document.querySelector("#mobileLeft"),
+  mobileRight: document.querySelector("#mobileRight"),
+  mobileDouble: document.querySelector("#mobileDouble"),
   rankingList: document.querySelector("#rankingList"),
   rankingStatus: document.querySelector("#rankingStatus"),
   refreshRankings: document.querySelector("#refreshRankings")
@@ -31,6 +34,7 @@ const state = {
   score: 0,
   startedAt: 0,
   rafId: 0,
+  mobileDoubleStep: false,
   path: ["start"],
   positions: [{ x: 0, y: 0 }]
 };
@@ -104,6 +108,12 @@ function setPlayerStep(direction, count) {
   }, 150);
 }
 
+function setMobileDoubleStep(enabled) {
+  state.mobileDoubleStep = enabled;
+  elements.mobileDouble.classList.toggle("is-active", enabled);
+  elements.mobileDouble.setAttribute("aria-pressed", String(enabled));
+}
+
 function updateTimer() {
   if (!state.active) return;
 
@@ -145,6 +155,13 @@ function attemptMove(direction, count) {
   setScore(state.score + count);
 }
 
+function handleMobileMove(direction) {
+  const count = state.mobileDoubleStep ? 2 : 1;
+  setMobileDoubleStep(false);
+  attemptMove(direction, count);
+  elements.stage.focus();
+}
+
 function resetGame({ showMenu = false } = {}) {
   cancelAnimationFrame(state.rafId);
   state.active = false;
@@ -154,6 +171,7 @@ function resetGame({ showMenu = false } = {}) {
   state.path = ["start"];
   state.positions = [{ x: 0, y: 0 }];
   elements.player.classList.remove("fall", "hop-left", "hop-right", "face-left", "face-right");
+  setMobileDoubleStep(false);
   elements.timerText.textContent = "20.0";
   elements.timerBar.style.transform = "scaleX(1)";
   elements.endOverlay.classList.add("hidden");
@@ -270,6 +288,12 @@ elements.restartButton.addEventListener("click", () => {
   elements.nickname.focus();
 });
 
+elements.mobileLeft.addEventListener("click", () => handleMobileMove("left"));
+elements.mobileRight.addEventListener("click", () => handleMobileMove("right"));
+elements.mobileDouble.addEventListener("click", () => {
+  setMobileDoubleStep(!state.mobileDoubleStep);
+  elements.stage.focus();
+});
 elements.refreshRankings.addEventListener("click", () => loadRankings());
 window.addEventListener("keydown", handleKeydown);
 window.addEventListener("resize", renderStairs);
