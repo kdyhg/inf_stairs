@@ -1,8 +1,8 @@
 const TOTAL_TIME_MS = 20_000;
 const LOOKAHEAD = 36;
-const STEP_X = 48;
-const STEP_Y = 31;
-const STAGE_BASE_OFFSET = 174;
+const STEP_X = 56;
+const STEP_Y = 35;
+const STAGE_BASE_OFFSET = 145;
 const RANKINGS_ENDPOINT = "/api/rankings";
 
 const elements = {
@@ -95,7 +95,7 @@ function setPlayerStep(direction, count) {
   elements.player.classList.remove("hop-left", "hop-right");
   elements.player.classList.toggle("face-left", direction === "left");
   elements.player.classList.toggle("face-right", direction === "right");
-  const hopDistance = (direction === "left" ? -38 : 38) * count;
+  const hopDistance = (direction === "left" ? -42 : 42) * count;
   elements.player.style.setProperty("--hop-x", `${hopDistance}px`);
   elements.player.style.setProperty("--hop-half", `${hopDistance / 2}px`);
   elements.player.style.setProperty("--hop-rot", direction === "left" ? "-7deg" : "7deg");
