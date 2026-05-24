@@ -1,8 +1,8 @@
 const TOTAL_TIME_MS = 20_000;
 const LOOKAHEAD = 36;
-const STEP_X = 54;
+const STEP_X = 48;
 const STEP_Y = 31;
-const STAGE_BASE_OFFSET = 168;
+const STAGE_BASE_OFFSET = 174;
 const RANKINGS_ENDPOINT = "/api/rankings";
 
 const elements = {
@@ -60,7 +60,7 @@ function createStair(level) {
   const position = state.positions[level];
   const nextDirection = state.path[level + 1];
 
-  stair.className = "stair";
+  stair.className = `stair ${state.path[level] === "left" ? "stair-left" : "stair-right"}`;
   if (level === state.score) stair.classList.add("current");
   if (level > state.score && level <= state.score + 3) {
     stair.classList.add(nextDirection === "left" ? "next-left" : "next-right");
@@ -92,12 +92,14 @@ function setScore(score) {
 }
 
 function setPlayerStep(direction) {
-  elements.player.classList.remove("step-left", "step-right");
+  elements.player.classList.remove("hop-left", "hop-right");
+  elements.player.classList.toggle("face-left", direction === "left");
+  elements.player.classList.toggle("face-right", direction === "right");
   void elements.player.offsetWidth;
-  elements.player.classList.add(direction === "left" ? "step-left" : "step-right");
+  elements.player.classList.add(direction === "left" ? "hop-left" : "hop-right");
   window.setTimeout(() => {
-    elements.player.classList.remove("step-left", "step-right");
-  }, 120);
+    elements.player.classList.remove("hop-left", "hop-right");
+  }, 170);
 }
 
 function updateTimer() {
@@ -149,7 +151,7 @@ function resetGame({ showMenu = false } = {}) {
   state.startedAt = 0;
   state.path = ["start"];
   state.positions = [{ x: 0, y: 0 }];
-  elements.player.classList.remove("fall", "step-left", "step-right");
+  elements.player.classList.remove("fall", "hop-left", "hop-right", "face-left", "face-right");
   elements.timerText.textContent = "20.0";
   elements.timerBar.style.transform = "scaleX(1)";
   elements.endOverlay.classList.add("hidden");

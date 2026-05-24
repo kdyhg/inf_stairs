@@ -190,18 +190,34 @@ button:active {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 78px;
-  height: 31px;
-  border: 3px solid var(--ink);
-  border-radius: 3px;
+  width: 58px;
+  height: 28px;
+  border: 2px solid #3b3435;
+  border-radius: 2px;
   background:
-    radial-gradient(circle at 18px 9px, #8a817c 0 2px, transparent 3px),
-    radial-gradient(circle at 44px 18px, #958c86 0 2px, transparent 3px),
-    linear-gradient(180deg, #efebe1 0 34%, var(--stone) 35% 100%);
-  box-shadow: 0 5px 0 #7b7370, 4px 7px 0 rgba(37, 23, 31, 0.32);
+    radial-gradient(circle at 9px 7px, #7a7473 0 2px, transparent 3px),
+    radial-gradient(circle at 28px 12px, #918a88 0 2px, transparent 3px),
+    radial-gradient(circle at 46px 8px, #756d6c 0 2px, transparent 3px),
+    linear-gradient(180deg, #f2eee4 0 28%, #c8c2ba 29% 100%);
+  box-shadow:
+    inset 0 -4px 0 #9f9690,
+    0 4px 0 #6d6663,
+    4px 6px 0 rgba(37, 23, 31, 0.3);
   transform:
     translateX(calc(-50% + var(--x)))
     translateY(var(--y));
+}
+
+.stair::after {
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: -7px;
+  height: 7px;
+  border: 2px solid #3b3435;
+  border-top: 0;
+  background: #8a817c;
+  content: "";
 }
 
 .stair.current {
@@ -233,101 +249,225 @@ button:active {
 .player {
   position: absolute;
   left: 50%;
-  bottom: 104px;
+  bottom: 98px;
   z-index: 22;
-  width: 48px;
-  height: 74px;
-  transform: translateX(-50%);
-  transition: transform 110ms ease, opacity 160ms ease;
+  width: 58px;
+  height: 88px;
+  --flip: 1;
+  --hop-x: 0px;
+  --hop-half: 0px;
+  --hop-rot: 0deg;
+  transform: translateX(-50%) scaleX(var(--flip));
+  transform-origin: center bottom;
+  transition: opacity 160ms ease;
 }
 
-.player.step-left {
-  transform: translateX(-64px) rotate(-6deg);
+.player.face-left {
+  --flip: -1;
 }
 
-.player.step-right {
-  transform: translateX(16px) rotate(6deg);
+.player.hop-left {
+  --hop-x: -38px;
+  --hop-half: -19px;
+  --hop-rot: -7deg;
+  animation: stair-hop 170ms steps(3, end);
+}
+
+.player.hop-right {
+  --hop-x: 38px;
+  --hop-half: 19px;
+  --hop-rot: 7deg;
+  animation: stair-hop 170ms steps(3, end);
+}
+
+.player.hop-left .arm-left,
+.player.hop-right .arm-left {
+  transform: rotate(32deg);
+}
+
+.player.hop-left .arm-right,
+.player.hop-right .arm-right {
+  transform: rotate(-34deg);
+}
+
+.player.hop-left .leg-left,
+.player.hop-right .leg-left {
+  transform: rotate(-18deg);
+}
+
+.player.hop-left .leg-right,
+.player.hop-right .leg-right {
+  transform: rotate(18deg);
 }
 
 .player.fall {
-  transform: translate(-50%, 130px) rotate(38deg);
+  transform: translate(-50%, 130px) scaleX(var(--flip)) rotate(38deg);
 }
 
+.hair,
 .head,
+.glasses,
 .body,
+.arm,
+.leg,
 .feet {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 4px solid var(--ink);
+}
+
+.hair {
+  left: 15px;
+  top: 0;
+  z-index: 6;
+  width: 31px;
+  height: 18px;
+  border: 3px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 14px 9px 4px 2px;
+  background:
+    linear-gradient(135deg, transparent 0 42%, #532a18 43% 100%),
+    #744020;
+  box-shadow:
+    -5px 8px 0 #532a18,
+    10px 2px 0 #744020;
 }
 
 .head {
-  top: 0;
-  width: 32px;
-  height: 30px;
-  border-radius: 5px;
-  background: #ffd0a4;
+  left: 13px;
+  top: 12px;
+  z-index: 5;
+  width: 35px;
+  height: 31px;
+  border: 3px solid var(--ink);
+  border-radius: 4px 7px 7px 5px;
+  background: #ffd2a5;
+  box-shadow: inset -5px -4px 0 #e9a878;
 }
 
 .head::before {
   position: absolute;
-  left: -6px;
-  top: -8px;
-  width: 34px;
-  height: 13px;
-  border: 4px solid var(--ink);
-  border-bottom: 0;
-  background: #5e2f20;
+  left: 21px;
+  top: 15px;
+  width: 7px;
+  height: 5px;
+  border-bottom: 3px solid #8c4a34;
   content: "";
 }
 
 .head::after {
   position: absolute;
-  left: 7px;
-  top: 11px;
-  width: 5px;
-  height: 5px;
-  background: var(--ink);
-  box-shadow: 12px 0 0 var(--ink);
+  left: 14px;
+  top: 22px;
+  width: 11px;
+  height: 3px;
+  background: #6c2e22;
   content: "";
+}
+
+.glasses {
+  left: 9px;
+  top: 23px;
+  z-index: 7;
+  width: 40px;
+  height: 13px;
+  background:
+    radial-gradient(circle at 11px 7px, transparent 0 6px, var(--ink) 7px 9px, transparent 10px),
+    radial-gradient(circle at 28px 7px, transparent 0 6px, var(--ink) 7px 9px, transparent 10px),
+    linear-gradient(var(--ink), var(--ink)) 18px 6px / 6px 3px no-repeat;
 }
 
 .body {
-  top: 29px;
-  width: 36px;
+  left: 15px;
+  top: 42px;
+  z-index: 4;
+  width: 34px;
   height: 33px;
+  border: 3px solid var(--ink);
   border-radius: 4px;
-  background: linear-gradient(90deg, #244f9f 0 32%, #fff 33% 54%, #df3d2e 55% 100%);
-}
-
-.body::before,
-.body::after {
-  position: absolute;
-  top: 5px;
-  width: 13px;
-  height: 25px;
-  border: 4px solid var(--ink);
-  background: #ffd0a4;
-  content: "";
+  background:
+    linear-gradient(90deg, #1f4e97 0 32%, #f2efe4 33% 55%, #1f4e97 56% 100%);
+  box-shadow: inset -5px 0 0 #133369;
 }
 
 .body::before {
-  left: -17px;
-  transform: rotate(18deg);
+  position: absolute;
+  left: 13px;
+  top: -1px;
+  width: 8px;
+  height: 31px;
+  background: linear-gradient(180deg, #df3425 0 70%, #9d201b 71% 100%);
+  clip-path: polygon(50% 0, 100% 34%, 70% 100%, 30% 100%, 0 34%);
+  content: "";
 }
 
-.body::after {
-  right: -17px;
+.arm {
+  top: 45px;
+  z-index: 3;
+  width: 12px;
+  height: 31px;
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  background: #ffd2a5;
+  transform-origin: 50% 4px;
+  transition: transform 90ms steps(2, end);
+}
+
+.arm-left {
+  left: 4px;
   transform: rotate(-18deg);
 }
 
-.feet {
-  top: 58px;
-  width: 45px;
-  height: 14px;
-  border-radius: 3px;
+.arm-right {
+  right: 2px;
+  transform: rotate(16deg);
+}
+
+.leg {
+  top: 70px;
+  z-index: 2;
+  width: 13px;
+  height: 20px;
+  border: 3px solid var(--ink);
+  border-top: 0;
   background: #263862;
+  transform-origin: center top;
+  transition: transform 90ms steps(2, end);
+}
+
+.leg-left {
+  left: 18px;
+}
+
+.leg-right {
+  left: 32px;
+}
+
+.feet {
+  left: 12px;
+  top: 84px;
+  z-index: 3;
+  width: 44px;
+  height: 10px;
+  border: 3px solid var(--ink);
+  border-radius: 2px;
+  background: #171924;
+}
+
+@keyframes stair-hop {
+  0% {
+    transform: translateX(-50%) translateY(0) scaleX(var(--flip)) rotate(0);
+  }
+
+  33% {
+    transform: translateX(calc(-50% + var(--hop-half))) translateY(-20px) scaleX(var(--flip)) rotate(var(--hop-rot));
+  }
+
+  66% {
+    transform: translateX(calc(-50% + var(--hop-x))) translateY(-31px) scaleX(var(--flip)) rotate(var(--hop-rot));
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0) scaleX(var(--flip)) rotate(0);
+  }
 }
 
 .start-screen {
@@ -449,27 +589,6 @@ input {
   margin-top: 4px;
   font-size: 32px;
   clip-path: polygon(0 0, 78% 0, 100% 50%, 78% 100%, 0 100%);
-}
-
-.menu-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-  width: 100%;
-  margin-top: 6px;
-}
-
-.menu-buttons span {
-  display: grid;
-  place-items: center;
-  min-height: 48px;
-  border: 4px solid var(--ink);
-  border-radius: 6px;
-  color: #fff;
-  background: linear-gradient(180deg, #ffc445, #ef7a1e);
-  box-shadow: 0 5px 0 var(--panel-dark);
-  font-size: 16px;
-  text-shadow: 2px 2px 0 var(--panel-dark);
 }
 
 .overlay {
