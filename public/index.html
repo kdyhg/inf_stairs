@@ -29,14 +29,16 @@
 
           <div id="startOverlay" class="start-screen">
             <form id="startForm" class="start-menu">
-              <div class="logo-mark" aria-hidden="true">
-                <span>INFINITE</span>
-                <strong>무한의 계단</strong>
+              <div class="menu-fields">
+                <label for="nickname">닉네임</label>
+                <input id="nickname" name="nickname" maxlength="16" autocomplete="off" placeholder="이름을 입력하세요" required />
               </div>
-              <p class="menu-copy">닉네임을 입력하고 20초 동안 최고층에 도전하세요.</p>
-              <label for="nickname">닉네임</label>
-              <input id="nickname" name="nickname" maxlength="16" autocomplete="off" placeholder="랭킹에 표시될 이름" required />
-              <button class="play-button" type="submit">PLAY</button>
+              <div class="menu-actions">
+                <button id="openRankings" class="rank-menu-button" type="button" aria-controls="rankingPanel">RANK</button>
+                <button class="play-button" type="submit" aria-label="게임 시작">
+                  <span class="sr-only">게임 시작</span>
+                </button>
+              </div>
             </form>
           </div>
 
@@ -55,7 +57,7 @@
         </div>
       </section>
 
-      <aside class="ranking-panel" aria-label="랭킹">
+      <aside id="rankingPanel" class="ranking-panel" aria-label="랭킹" tabindex="-1">
         <div class="ranking-head">
           <div>
             <p class="eyebrow">server ranking</p>

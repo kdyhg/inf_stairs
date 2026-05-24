@@ -19,6 +19,8 @@ const elements = {
   timerText: document.querySelector("#timerText"),
   stairLayer: document.querySelector("#stairLayer"),
   player: document.querySelector("#player"),
+  openRankings: document.querySelector("#openRankings"),
+  rankingPanel: document.querySelector("#rankingPanel"),
   rankingList: document.querySelector("#rankingList"),
   rankingStatus: document.querySelector("#rankingStatus"),
   refreshRankings: document.querySelector("#refreshRankings")
@@ -251,6 +253,16 @@ function renderRankings(rankings) {
   elements.rankingList.replaceChildren(fragment);
 }
 
+function openRankingPanel() {
+  void loadRankings("새로고침 완료");
+  elements.rankingPanel.classList.add("is-highlighted");
+  elements.rankingPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  elements.rankingPanel.focus({ preventScroll: true });
+  window.setTimeout(() => {
+    elements.rankingPanel.classList.remove("is-highlighted");
+  }, 900);
+}
+
 function handleKeydown(event) {
   if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
   event.preventDefault();
@@ -272,6 +284,7 @@ elements.restartButton.addEventListener("click", () => {
   elements.nickname.focus();
 });
 
+elements.openRankings.addEventListener("click", openRankingPanel);
 elements.refreshRankings.addEventListener("click", () => loadRankings());
 window.addEventListener("keydown", handleKeydown);
 window.addEventListener("resize", renderStairs);
