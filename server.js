@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 const PORT = Number(process.env.PORT || 3000);
 const PUBLIC_DIR = path.join(__dirname, "public");
 const DATA_FILE = process.env.INF_STAIRS_RANKINGS_FILE || path.join(__dirname, "data", "rankings.json");
+let cachedRankings = [];
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -33,16 +34,24 @@ async function readRankings() {
     await ensureDataFile();
     const raw = await readFile(DATA_FILE, "utf8");
     const rankings = JSON.parse(raw);
-    return Array.isArray(rankings) ? rankings : [];
+    cachedRankings = Array.isArray(rankings) ? rankings : [];
+    return cachedRankings;
   } catch (error) {
     console.error("Failed to read rankings:", error.message);
-    return [];
+    return cachedRankings;
   }
 }
 
 async function writeRankings(rankings) {
-  await ensureDataFile();
-  await writeFile(DATA_FILE, `${JSON.stringify(rankings, null, 2)}\n`, "utf8");
+  cachedRankings = rankings;
+  try {
+    await ensureDataFile();
+    await writeFile(DATA_FILE, `${JSON.stringify(rankings, null, 2)}\n`, "utf8");
+    return true;
+  } catch (error) {
+    console.error("Failed to write rankings:", error.message);
+    return false;
+  }
 }
 
 function sanitizeNickname(value) {
@@ -126,8 +135,8 @@ async function handleApi(req, res, pathname) {
       }
 
       const rankings = sortRankings([...(await readRankings()), result.entry]).slice(0, 100);
-      await writeRankings(rankings);
-      sendJson(res, 201, { entry: result.entry, rankings: rankings.slice(0, 50) });
+      const persisted = await writeRankings(rankings);
+      sendJson(res, 201, { entry: result.entry, rankings: rankings.slice(0, 50), persisted });
     } catch {
       sendJson(res, 400, { error: "요청을 처리할 수 없습니다." });
     }

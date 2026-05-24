@@ -2,7 +2,8 @@ const TOTAL_TIME_MS = 20_000;
 const LOOKAHEAD = 36;
 const STEP_X = 54;
 const STEP_Y = 31;
-const STAGE_BASE_Y = 342;
+const STAGE_BASE_OFFSET = 168;
+const RANKINGS_ENDPOINT = "/api/rankings";
 
 const elements = {
   stage: document.querySelector("#stage"),
@@ -66,7 +67,7 @@ function createStair(level) {
   }
 
   stair.style.setProperty("--x", `${(position.x - current.x) * STEP_X}px`);
-  stair.style.setProperty("--y", `${STAGE_BASE_Y - offset * STEP_Y}px`);
+  stair.style.setProperty("--y", `${elements.stage.clientHeight - STAGE_BASE_OFFSET - offset * STEP_Y}px`);
   stair.style.zIndex = String(100 - offset);
   return stair;
 }
@@ -140,7 +141,7 @@ function attemptMove(direction, count) {
   setScore(state.score + count);
 }
 
-function resetGame() {
+function resetGame({ showMenu = false } = {}) {
   cancelAnimationFrame(state.rafId);
   state.active = false;
   state.submitted = false;
@@ -152,6 +153,7 @@ function resetGame() {
   elements.timerText.textContent = "20.0";
   elements.timerBar.style.transform = "scaleX(1)";
   elements.endOverlay.classList.add("hidden");
+  elements.stage.classList.toggle("is-menu", showMenu);
   setScore(0);
 }
 
@@ -161,6 +163,7 @@ function startGame(nickname) {
   state.active = true;
   state.startedAt = performance.now();
   elements.startOverlay.classList.add("hidden");
+  elements.stage.classList.remove("is-menu");
   elements.stage.focus();
   updateTimer();
 }
@@ -184,7 +187,8 @@ async function submitScore() {
   const elapsedMs = Math.min(TOTAL_TIME_MS, Math.round(performance.now() - state.startedAt));
 
   try {
-    const response = await fetch("/api/rankings", {
+    elements.rankingStatus.textContent = "점수를 등록하는 중...";
+    const response = await fetch(RANKINGS_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -195,25 +199,26 @@ async function submitScore() {
     });
 
     if (!response.ok) throw new Error("submit-failed");
-    const data = await response.json();
-    renderRankings(data.rankings || []);
-    elements.rankingStatus.textContent = "점수가 등록되었습니다.";
+    await loadRankings("점수가 등록되었습니다.");
   } catch {
     elements.rankingStatus.textContent = "점수 등록에 실패했습니다. 서버를 확인해 주세요.";
   }
 }
 
-async function loadRankings() {
+async function loadRankings(successMessage = "새로고침 완료") {
   elements.rankingStatus.textContent = "랭킹을 불러오는 중...";
+  elements.refreshRankings.disabled = true;
 
   try {
-    const response = await fetch("/api/rankings", { cache: "no-store" });
+    const response = await fetch(`${RANKINGS_ENDPOINT}?t=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) throw new Error("rankings-failed");
     const data = await response.json();
     renderRankings(data.rankings || []);
-    elements.rankingStatus.textContent = "새로고침 완료";
+    elements.rankingStatus.textContent = data.rankings?.length ? successMessage : "아직 등록된 기록이 없습니다.";
   } catch {
     elements.rankingStatus.textContent = "랭킹 서버에 연결할 수 없습니다.";
+  } finally {
+    elements.refreshRankings.disabled = false;
   }
 }
 
@@ -255,13 +260,14 @@ elements.startForm.addEventListener("submit", (event) => {
 });
 
 elements.restartButton.addEventListener("click", () => {
-  resetGame();
+  resetGame({ showMenu: true });
   elements.startOverlay.classList.remove("hidden");
   elements.nickname.focus();
 });
 
-elements.refreshRankings.addEventListener("click", loadRankings);
+elements.refreshRankings.addEventListener("click", () => loadRankings());
 window.addEventListener("keydown", handleKeydown);
+window.addEventListener("resize", renderStairs);
 
-resetGame();
+resetGame({ showMenu: true });
 loadRankings();
