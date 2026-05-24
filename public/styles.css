@@ -232,7 +232,7 @@ button:active {
 .player {
   position: absolute;
   left: 50%;
-  bottom: 96px;
+  bottom: 132px;
   z-index: 22;
   width: 68px;
   height: 126px;
@@ -261,11 +261,11 @@ button:active {
 
 .player::after {
   position: absolute;
-  left: -65px;
-  bottom: -34px;
+  left: -38px;
+  bottom: 0;
   z-index: 3;
-  width: 154px;
-  height: 190px;
+  width: 102px;
+  height: 126px;
   background: url("assets/office-worker-dash.png") center / contain no-repeat;
   content: "";
   image-rendering: pixelated;

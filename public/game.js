@@ -102,7 +102,7 @@ function setPlayerStep(direction, count) {
   elements.player.classList.add(direction === "left" ? "hop-left" : "hop-right");
   window.setTimeout(() => {
     elements.player.classList.remove("hop-left", "hop-right");
-  }, 170);
+  }, 150);
 }
 
 function updateTimer() {
