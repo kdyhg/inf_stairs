@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>INF STAIRS</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="game-shell" aria-label="INF STAIRS game">
+        <div class="top-bar">
+          <div>
+            <p class="eyebrow">20 second climb</p>
+            <h1>INF STAIRS</h1>
+          </div>
+          <div class="score-card">
+            <span>층</span>
+            <strong id="score">0</strong>
+          </div>
+        </div>
+
+        <div class="timer-wrap" aria-label="남은 시간">
+          <div id="timerBar" class="timer-bar"></div>
+          <span id="timerText">20.0</span>
+        </div>
+
+        <div id="stage" class="stage" tabindex="0" aria-label="계단 게임 화면">
+          <div id="stairLayer" class="stair-layer"></div>
+          <div id="player" class="player" aria-hidden="true">
+            <span class="head"></span>
+            <span class="body"></span>
+            <span class="feet"></span>
+          </div>
+          <div id="startOverlay" class="overlay">
+            <form id="startForm" class="dialog">
+              <p class="dialog-kicker">READY?</p>
+              <label for="nickname">닉네임</label>
+              <input id="nickname" name="nickname" maxlength="16" autocomplete="off" placeholder="랭킹에 표시될 이름" required />
+              <button type="submit">START</button>
+            </form>
+          </div>
+          <div id="endOverlay" class="overlay hidden">
+            <div class="dialog">
+              <p class="dialog-kicker" id="endReason">TIME UP</p>
+              <h2><span id="finalScore">0</span>층</h2>
+              <button id="restartButton" type="button">다시 시작</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-strip">
+          <span>← / → 한 칸</span>
+          <span>Shift + ← / → 두 칸</span>
+          <span>방향을 틀리면 종료</span>
+        </div>
+      </section>
+
+      <aside class="ranking-panel" aria-label="랭킹">
+        <div class="ranking-head">
+          <div>
+            <p class="eyebrow">server ranking</p>
+            <h2>랭킹</h2>
+          </div>
+          <button id="refreshRankings" type="button" aria-label="랭킹 새로고침">새로고침</button>
+        </div>
+        <ol id="rankingList" class="ranking-list"></ol>
+        <p id="rankingStatus" class="ranking-status" role="status">랭킹을 불러오는 중...</p>
+      </aside>
+    </main>
+
+    <script src="game.js" type="module"></script>
+  </body>
+</html>

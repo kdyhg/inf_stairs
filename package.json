@@ -1,0 +1,14 @@
+{
+  "name": "inf-stairs",
+  "version": "1.0.0",
+  "description": "A retro stair-climbing keyboard game with server-backed rankings.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
