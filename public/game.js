@@ -97,7 +97,6 @@ function setPlayerStep(direction, count) {
   elements.player.classList.toggle("face-right", direction === "right");
   const hopDistance = (direction === "left" ? -42 : 42) * count;
   elements.player.style.setProperty("--hop-half", `${hopDistance / 2}px`);
-  elements.player.style.setProperty("--hop-rot", direction === "left" ? "-7deg" : "7deg");
   void elements.player.offsetWidth;
   elements.player.classList.add(direction === "left" ? "hop-left" : "hop-right");
   window.setTimeout(() => {

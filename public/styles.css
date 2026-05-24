@@ -239,7 +239,6 @@ button:active {
   --flip: 1;
   --dash-flip: 1;
   --hop-half: 0px;
-  --hop-rot: 0deg;
   transform: translateX(-50%);
   transform-origin: center bottom;
   transition: opacity 160ms ease;
@@ -310,15 +309,15 @@ button:active {
 
 @keyframes stair-hop {
   0% {
-    transform: translateX(-50%) translateY(0) rotate(0);
+    transform: translateX(-50%) translateY(0);
   }
 
   45% {
-    transform: translateX(calc(-50% + var(--hop-half))) translateY(-5px) rotate(var(--hop-rot));
+    transform: translateX(calc(-50% + var(--hop-half))) translateY(-5px);
   }
 
   100% {
-    transform: translateX(-50%) translateY(0) rotate(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
