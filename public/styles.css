@@ -34,19 +34,32 @@ input {
 }
 
 button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
   border: 4px solid var(--ink);
   border-radius: 6px;
-  color: #fff;
-  background: linear-gradient(180deg, #ffbf35 0%, #f07118 70%, #ba3e12 100%);
-  box-shadow: 0 6px 0 var(--panel-dark), 0 8px 0 var(--ink);
+  color: #a43113;
+  background:
+    linear-gradient(180deg, #fff2b8 0 72%, #f6cf72 73% 100%);
+  box-shadow:
+    inset 0 0 0 4px #f57b18,
+    inset 0 -8px 0 #de6a17,
+    0 6px 0 #8f3f18,
+    0 9px 0 var(--ink);
   cursor: pointer;
-  text-shadow: 2px 2px 0 var(--panel-dark);
+  font-weight: 900;
+  text-shadow: 1px 1px 0 #fff6cf;
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 button:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 var(--panel-dark), 0 4px 0 var(--ink);
+  box-shadow:
+    inset 0 0 0 4px #f57b18,
+    inset 0 -5px 0 #de6a17,
+    0 2px 0 #8f3f18,
+    0 4px 0 var(--ink);
 }
 
 .app {
@@ -267,16 +280,10 @@ button:active {
 }
 
 .player.hop-left {
-  --hop-x: -38px;
-  --hop-half: -19px;
-  --hop-rot: -7deg;
   animation: stair-hop 170ms steps(3, end);
 }
 
 .player.hop-right {
-  --hop-x: 38px;
-  --hop-half: 19px;
-  --hop-rot: 7deg;
   animation: stair-hop 170ms steps(3, end);
 }
 
@@ -584,11 +591,31 @@ input {
 }
 
 .play-button {
-  width: min(160px, 100%);
-  min-height: 70px;
+  width: 118px;
+  min-height: 82px;
   margin-top: 4px;
-  font-size: 32px;
-  clip-path: polygon(0 0, 78% 0, 100% 50%, 78% 100%, 0 100%);
+  color: transparent;
+  font-size: 0;
+}
+
+.play-button::before {
+  width: 0;
+  height: 0;
+  margin-left: 8px;
+  border-top: 22px solid transparent;
+  border-bottom: 22px solid transparent;
+  border-left: 34px solid #d82922;
+  filter: drop-shadow(3px 3px 0 #8f1e18);
+  content: "";
+}
+
+.play-button::after {
+  position: absolute;
+  inset: 7px;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  border-radius: 3px;
+  content: "";
+  pointer-events: none;
 }
 
 .overlay {
@@ -650,14 +677,17 @@ input {
   padding: 6px;
   border: 3px solid var(--ink);
   border-radius: 5px;
-  color: #fff;
-  background: linear-gradient(180deg, #fbb541, #d95a1e);
-  box-shadow: 0 4px 0 var(--panel-dark);
+  color: #a43113;
+  background: linear-gradient(180deg, #fff2b8 0 72%, #f6cf72 73% 100%);
+  box-shadow:
+    inset 0 0 0 3px #f57b18,
+    inset 0 -6px 0 #de6a17,
+    0 4px 0 #8f3f18;
   font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 11px;
   font-weight: 900;
   text-align: center;
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 1px 1px 0 #fff6cf;
 }
 
 .ranking-panel {

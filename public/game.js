@@ -91,10 +91,14 @@ function setScore(score) {
   renderStairs();
 }
 
-function setPlayerStep(direction) {
+function setPlayerStep(direction, count) {
   elements.player.classList.remove("hop-left", "hop-right");
   elements.player.classList.toggle("face-left", direction === "left");
   elements.player.classList.toggle("face-right", direction === "right");
+  const hopDistance = (direction === "left" ? -38 : 38) * count;
+  elements.player.style.setProperty("--hop-x", `${hopDistance}px`);
+  elements.player.style.setProperty("--hop-half", `${hopDistance / 2}px`);
+  elements.player.style.setProperty("--hop-rot", direction === "left" ? "-7deg" : "7deg");
   void elements.player.offsetWidth;
   elements.player.classList.add(direction === "left" ? "hop-left" : "hop-right");
   window.setTimeout(() => {
@@ -139,7 +143,7 @@ function attemptMove(direction, count) {
     return;
   }
 
-  setPlayerStep(direction);
+  setPlayerStep(direction, count);
   setScore(state.score + count);
 }
 
