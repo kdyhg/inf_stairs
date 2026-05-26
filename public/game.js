@@ -132,6 +132,12 @@ function updateTimer() {
   state.rafId = requestAnimationFrame(updateTimer);
 }
 
+function startTimerIfNeeded() {
+  if (state.startedAt) return;
+  state.startedAt = performance.now();
+  updateTimer();
+}
+
 function canMove(direction, count) {
   for (let step = 1; step <= count; step += 1) {
     if (state.path[state.score + step] !== direction) {
@@ -143,6 +149,7 @@ function canMove(direction, count) {
 
 function attemptMove(direction, count) {
   if (!state.active) return;
+  startTimerIfNeeded();
   ensurePath(state.score + count + LOOKAHEAD);
 
   if (!canMove(direction, count)) {
@@ -183,11 +190,9 @@ function startGame(nickname) {
   resetGame();
   state.nickname = nickname;
   state.active = true;
-  state.startedAt = performance.now();
   elements.startOverlay.classList.add("hidden");
   elements.stage.classList.remove("is-menu");
   elements.stage.focus();
-  updateTimer();
 }
 
 async function endGame(reason) {
@@ -206,7 +211,9 @@ async function endGame(reason) {
 }
 
 async function submitScore() {
-  const elapsedMs = Math.min(TOTAL_TIME_MS, Math.round(performance.now() - state.startedAt));
+  const elapsedMs = state.startedAt
+    ? Math.min(TOTAL_TIME_MS, Math.round(performance.now() - state.startedAt))
+    : 0;
 
   try {
     elements.rankingStatus.textContent = "점수를 등록하는 중...";
